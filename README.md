@@ -58,7 +58,8 @@ sudo systemctl start prometheus
 <img width="730" height="512" alt="image" src="https://github.com/user-attachments/assets/4e13c24c-c790-4182-9dae-3dc0e164ba6c" />
 
 
-Заходим на   http://192.168.50.238:9090/
+Заходим на   http://192.168.50.238:9090/  
+
 <img width="629" height="511" alt="image" src="https://github.com/user-attachments/assets/b5dd94f6-53ff-4956-a960-22594a875a73" />
 
 
