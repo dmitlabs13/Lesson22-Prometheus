@@ -67,8 +67,71 @@ sudo systemctl start prometheus
 
 
 
-ставим экспортер
+ставим экспортер на второй сервер  
 
 ```
 sudo apt install prometheus-node-exporter -y
 ```
+
+делаем конфиг 
+```
+global:
+  scrape_interval: 15s # Интервал, по которому идет обращение к таргетам
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node'
+    file_sd_configs:
+      - files:
+        - /etc/prometheus/target.json
+```
+
+создаем файл /etc/prometheus/target.json
+```
+
+  {
+    "targets": ["192.168.50.227:9100", "192.168.1.11:9100"],
+    "labels": {
+      "env": "production",
+      "datacenter": "msk"
+    }
+  }
+]
+
+```
+
+перезагружаем сервис и проверяем результат root@lp-ubn1:/tmp# sudo systemctl restart prometheus  
+<img width="1456" height="590" alt="image" src="https://github.com/user-attachments/assets/ccf4229d-cd26-4443-bb16-eb4a4c7ef2cd" />  
+
+
+ставим grafana
+```
+# Установка grafana
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y apt-transport-https software-properties-common wget
+# так как блокирется установка через apt, ставим через deb пакет и перекинем на ВМ
+wget https://dl.grafana.com/grafana/release/13.1.0/grafana_13.1.0_28013217238_linux_amd64.deb
+sudo systemctl daemon-reexec
+sudo systemctl enable grafana-server
+sudo systemctl start grafana-server
+
+```
+
+смотрим http://192.168.50.238:3000/ работает  
+
+<img width="663" height="576" alt="image" src="https://github.com/user-attachments/assets/b5b51913-0e1d-4697-ae9f-f0799ab1f8f5" />
+
+
+
+Настроил дашборд  
+<img width="1375" height="716" alt="image" src="https://github.com/user-attachments/assets/3c91a42c-bb98-4897-a8fe-2eb5e9cea00e" />
+
+
+
+
+
+
+
